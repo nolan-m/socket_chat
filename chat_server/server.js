@@ -4,7 +4,7 @@ var express = require('express'),
 	server	= require('http').Server(app),
 	io 		= require('socket.io')(server);
 
-app.use(express.static(_dirname + '/public'));
+app.use(express.static(__dirname + '/public'));
 
 mongoose.connect("mongodb://127.0.0.1:27017/chat");
 
@@ -17,7 +17,7 @@ var ChatSchema = mongoose.Schema({
 });
 
 // create a model from the chat schema
-var Chat = mongoose.mode('Chat', ChatSchema);
+var Chat = mongoose.model('Chat', ChatSchema);
 
 // allow CORS
 
@@ -126,3 +126,5 @@ io.on('connection', function (socket) {
 		});
 	});
 });
+
+server.listen(2015);
