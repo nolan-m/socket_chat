@@ -64,3 +64,27 @@ app.directive('ngEnter', function () {
 		});
 	};
 });
+
+app.controlller('MainCtrl', function ($scope, Window, GUI, $mdDialog, socket, $http) {
+
+	//menu setup
+	$scope.messages = [];
+	$scope.room 	= '';
+
+	var windowMenu = new GUI.Menu({
+		type: 'menubar'
+	});
+	var roomsMenu = new GUI.Menu();
+
+	windowMenu.append(new GUI.MenuItem({
+		label: 'Rooms',
+		submenu: roomsMenu
+	}));
+
+	windowMenu.append(new GUI.MenuItem({
+		label: 'Exit',
+		click: function () {
+			Window.close();
+		}
+	}));
+});
