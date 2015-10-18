@@ -96,6 +96,7 @@ app.controlller('MainCtrl', function ($scope, Window, GUI, $mdDialog, socket, $h
 		GUI.Window.get().menu = windowMenu;
 	});
 
+	//ask for username
 	$scope.usernameModal = function (ev) {
 		//Launch Modale to get username
 		$mdDialog.show({
@@ -119,6 +120,23 @@ app.controlller('MainCtrl', function ($scope, Window, GUI, $mdDialog, socket, $h
 			});
 		}, function () {
 			Window.close();
+		});
+	};
+
+	//listen for new messages
+	socket.on('message created', function (data){
+		//push to new message to our $scope.messages
+		$scope.messages.push(data);
+		//empty the textarea
+		$scope.message = '';
+	});
+	//send a new message
+	$scope.send = function (msg) {
+		//notify the server that there is a new message with the message as the packet
+		socket.emit('new message', {
+			room: $scope.room,
+			message: msg,
+			unsername: $scope.username
 		});
 	};
 });
