@@ -96,4 +96,29 @@ app.controlller('MainCtrl', function ($scope, Window, GUI, $mdDialog, socket, $h
 		GUI.Window.get().menu = windowMenu;
 	});
 
+	$scope.usernameModal = function (ev) {
+		//Launch Modale to get username
+		$mdDialog.show({
+			controlller: UsernameDialogController,
+			templateUrl: 'partials/username.tmpl.html',
+			parent: angular.element(document.body),
+			targetEvent: ev
+		})
+		.then(function (answer) {
+			//Set username with the value returned from the modal
+			$scope.username = answer;
+			//Tell the server there is a new user
+			socket.emit('new user', {
+				username: answer
+			});
+			//set the room to general
+			$scope.room = 'GENERAL';
+			//fetch the chat message in General
+			$http.get(serverBaseUrl + '/msg?room=' + $scope.room).success(function (msgs) {
+				$scope.messages = msgs;
+			});
+		}, function () {
+			Window.close();
+		});
+	};
 });
